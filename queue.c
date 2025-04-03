@@ -2,7 +2,7 @@
 #include "tile_game.h"
 
 void enqueue(struct queue *q, struct game_state state) {
-    uint64_t serialized_state = serialize_game_state(state);
+    uint64_t serialized_state = serialize(state);
     insert_at_tail(&q->data, serialized_state);
 }
 
