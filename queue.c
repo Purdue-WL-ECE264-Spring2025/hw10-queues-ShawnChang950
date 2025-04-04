@@ -20,9 +20,22 @@ int number_of_moves(struct game_state start) {
         struct game_state state = dequeue(&qu);
         uint16_t prev = state.num_steps;
 
-        if(is_solved(&state))
+        int count = 1; //iter thru array
+        int complete = 1;
+        for(int i = 0; i< 4; i++){
+            for(int j = 0; j < 4; j++ ){
+                if(state.tiles[i][j] != count)
+                {
+                    complete = 0;
+                }
+                count++;
+                count %= 16;
+            }
+        }
+
+        if (complete)
         {
-            free_list(qu.data);
+            free_list(qu.data); //complete return
             return state.num_steps;
         }
 
