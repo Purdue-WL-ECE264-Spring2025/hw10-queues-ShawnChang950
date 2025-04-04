@@ -15,4 +15,52 @@ struct game_state dequeue(struct queue *q) {
 
 }
 
-int number_of_moves(struct game_state start) { return start.num_steps; }
+int number_of_moves(struct game_state start) { 
+    struct queue qu = {NULL};
+    enqueue(&qu, start); 
+    while(qu.data.head != NULL){
+        struct game_state state = dequeue(&qu);
+        uint16_t prev = state.num_steps;
+
+        if(is_solved(&state))
+        {
+            free_list(qu.data);
+            return state.num_steps;
+        }
+
+        struct game_state temp;
+
+        temp = state;
+        
+        //MOVE UP
+        move_up(&temp);
+        if(temp.num_steps > prev)
+        {
+            enqueue(&qu, temp);
+        }
+        //MOVE DOWN
+        temp = state;
+        move_down(&temp);
+        if(temp.num_steps > prev)
+        {
+            enqueue(&qu, temp);
+        }
+        //Move left
+        temp = state;
+        move_left(&temp);
+        if(temp.num_steps > prev)
+        {
+            enqueue(&qu, temp);
+        }
+
+        //MOVE RIGHT
+        temp = state;
+        move_right(&temp);
+        if(temp.num_steps > prev)
+        {
+            enqueue(&qu, temp);
+        }
+    }
+    free_list(qu.data);
+    return -1;
+ }
